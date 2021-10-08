@@ -22,6 +22,7 @@ namespace gyak4
         Excel.Workbook xlWB;
         Excel.Worksheet xlSheet;
         string[] headers;
+        object[,] values;
         public Form1()
         {
             InitializeComponent();
@@ -78,7 +79,7 @@ namespace gyak4
             for (int i = 0; i < headers.Length; i++)
                 xlSheet.Cells[1, i+1] = headers[i];
 
-            object[,] values = new object[lakasok.Count, headers.Length];
+            values = new object[lakasok.Count, headers.Length];
             int counter = 0;
             int floorColumn = 6;
             foreach (var lakas in lakasok)
@@ -139,6 +140,14 @@ namespace gyak4
             int lastRowID = xlSheet.UsedRange.Rows.Count;
             Excel.Range completeTable = xlSheet.get_Range(GetCell(1, 1), GetCell(lastRowID, headers.Length));
             completeTable.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
+
+            Excel.Range firstColumn = xlSheet.get_Range(GetCell(2, 1), GetCell(lastRowID, 1));
+            firstColumn.Font.Bold = true;
+            firstColumn.Interior.Color = Color.LightYellow;
+
+            Excel.Range lastColumn = xlSheet.get_Range(GetCell(2, values.GetLength(1)), GetCell(1 + values.GetLength(0), values.GetLength(1)));
+            lastColumn.Interior.Color = Color.LightGreen;
+            lastColumn.NumberFormat = "###,###.00";
         }
     }
 }
