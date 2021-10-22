@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,8 @@ namespace WindowsFormsApp1
         PortfolioEntities context = new PortfolioEntities();
         List<Tick> Ticks;
         List<PortfolioItem> Portfolio = new List<PortfolioItem>();
+        List<decimal> Nyereségek = new List<decimal>();
+        //List<decimal> nyereségekRendezve;
         public Form1()
         {
             InitializeComponent();
@@ -23,7 +26,7 @@ namespace WindowsFormsApp1
             dataGridView1.DataSource = Ticks;
             CreatePortfolio();
 
-            List<decimal> Nyereségek = new List<decimal>();
+            
             int intervalum = 30;
             DateTime kezdőDátum = (from x in Ticks select x.TradingDay).Min();
             DateTime záróDátum = new DateTime(2016, 12, 30);
@@ -63,6 +66,22 @@ namespace WindowsFormsApp1
                 value += (decimal)last.Price * item.Volume;
             }
             return value;
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                using (StreamWriter sw = new StreamWriter(sfd.FileName))
+                {
+                    sw.WriteLine("Időszak\tNyereség");
+                    for (int i = 0; i < Nyereségek.Count; i++)
+                    {
+                        sw.WriteLine((i + 1).ToString() + "\t" + Nyereségek[i]);
+                    }
+                }
+            }
         }
     }
 }
