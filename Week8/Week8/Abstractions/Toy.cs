@@ -18,7 +18,7 @@ namespace Week8.Abstractions
             Paint += Toy_Paint;
         }
 
-        private void Toy_Paint(object sender, PaintEventArgs e)
+        public void Toy_Paint(object sender, PaintEventArgs e)
         {
             DrawImage(e.Graphics);
         }
